@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Cart – SweetBite Bakery</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>🧁 SweetBite Bakery & Dessert Shop</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="products.html">Menu</a>
+      <a href="cart.html" class="active">Cart 🍰</a>
+      <a href="about.html">About</a>
+    </nav>
+  </header>
+
+  <section class="cart">
+    <h2>🧺 Your Dessert Cart</h2>
+    <div id="cart-items"></div>
+    <h3 id="total-price">Total: ₹0</h3>
+    <button id="clear-cart">Clear Cart</button>
+  </section>
+
+  <footer>
+    <p>© 2025 SweetBite Bakery | Made with ❤️ and sugar dust</p>
+  </footer>
+
+  <script>
+    // Load cart from localStorage
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    function displayCart() {
+      const cartContainer = document.getElementById("cart-items");
+      const totalElement = document.getElementById("total-price");
+
+      cartContainer.innerHTML = "";
+      let total = 0;
+
+      if (cart.length === 0) {
+        cartContainer.innerHTML = "<p>Your cart is empty 🧁</p>";
+      } else {
+        cart.forEach((item, index) => {
+          const div = document.createElement("div");
+          div.classList.add("cart-item");
+          div.innerHTML = `
+            <p><strong>${item.name}</strong> - ₹${item.price}</p>
+            <button onclick="removeFromCart(${index})">Remove</button>
+          `;
+          cartContainer.appendChild(div);
+          total += item.price;
+        });
+      }
+
+      totalElement.textContent = "Total: ₹" + total;
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      displayCart();
+    }
+
+    document.getElementById("clear-cart").addEventListener("click", () => {
+      localStorage.removeItem("cart");
+      cart = [];
+      displayCart();
+    });
+
+    displayCart();
+  </script>
+  <!-- Toast Notification -->
+<div id="toast" class="toast">Item added to cart!</div>
+
+</body>
+</html>
